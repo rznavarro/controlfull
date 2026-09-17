@@ -21,6 +21,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,400..500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- Tailwind CDN, used only for the utility classes on the photo elements below.
+     Preflight is disabled so it can't clash with the site's own reset/custom CSS. -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { corePlugins: { preflight: false } };
+</script>
+
 <style>
   :root{
     --bg:#08090b;
@@ -141,6 +148,9 @@
     filter:blur(10px);z-index:0;pointer-events:none;
   }
   .hero-content{position:relative;z-index:1;}
+  @media (min-width:1024px){
+    .hero-content{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;}
+  }
   .hero .eyebrow{margin-bottom:22px;}
   .hero h1{
     font-size:clamp(2.6rem, 6.4vw, 5.6rem);
@@ -164,6 +174,20 @@
   /* fade-up reveal utility */
   .reveal{opacity:0;transform:translateY(28px);}
 
+  /* ---------- PHOTO STRUCTURAL FALLBACK ----------
+     Tailwind (CDN) supplies the visual treatment (radius, shadow, hover-scale,
+     responsive sizing) on the photo elements below; these plain-CSS rules just
+     guarantee correct positioning/cropping if that CDN is ever slow, blocked
+     or unavailable for a visitor, so the layout never collapses. */
+  .hero-photo{position:relative;overflow:hidden;border-radius:24px;aspect-ratio:4/5;}
+  .hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+  .hero-photo > div{position:absolute;inset:0;}
+  .hero-photo-caption{inset:auto 24px 24px 24px !important;}
+  .service-card > div:first-child{width:100%;height:176px;overflow:hidden;}
+  .service-card > div:first-child img{width:100%;height:100%;object-fit:cover;display:block;}
+  .cat-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+  .cat-card > div{position:absolute;inset:0;}
+
   /* ---------- MARQUEE / BRANDS ---------- */
   .marquee-section{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:34px 0;background:var(--bg-elev);overflow:hidden;}
   .marquee{display:flex;white-space:nowrap;gap:80px;width:max-content;animation:scroll 26s linear infinite;}
@@ -179,10 +203,11 @@
 
   /* ---------- SERVICES ---------- */
   .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
-  .service-card{background:var(--bg);padding:44px 34px;transition:background .4s var(--ease);position:relative;}
+  .service-card{background:var(--bg);transition:background .4s var(--ease);position:relative;overflow:hidden;}
   .service-card:hover{background:var(--bg-elev);}
+  .service-card-body{padding:32px 34px 40px;}
   .service-card .num{font-size:12.5px;color:var(--text-faint);letter-spacing:.1em;}
-  .service-card h3{font-size:1.3rem;margin-top:60px;font-weight:500;}
+  .service-card h3{font-size:1.3rem;margin-top:22px;font-weight:500;}
   .service-card p{margin-top:12px;color:var(--text-dim);font-size:.95rem;}
   .service-icon{
     width:44px;height:44px;border-radius:10px;border:1px solid var(--line);
@@ -317,21 +342,37 @@
   <section class="hero">
     <div class="hero-grid"></div>
     <div class="hero-glow"></div>
-    <div class="wrap hero-content">
-      <span class="eyebrow reveal">Diseño · Abastecimiento · Instalación</span>
-      <h1 class="reveal">Seguridad que se <em>anticipa</em>,<br>no que reacciona.</h1>
-      <p class="sub reveal">Control Full diseña, provee e instala sistemas de videovigilancia y seguridad para proyectos residenciales, comerciales e industriales en Chile — con equipos Hikvision y Dahua respaldados por soporte técnico real.</p>
-      <div class="hero-actions reveal">
-        <a href="#contacto" class="btn btn-primary">
-          Solicitar cotización
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-        </a>
-        <a href="#categorias" class="btn btn-ghost">Ver catálogo</a>
+    <div class="wrap hero-content lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 lg:items-center">
+      <div>
+        <span class="eyebrow reveal">Diseño · Abastecimiento · Instalación</span>
+        <h1 class="reveal">Seguridad que se <em>anticipa</em>,<br>no que reacciona.</h1>
+        <p class="sub reveal">Control Full diseña, provee e instala sistemas de videovigilancia y seguridad para proyectos residenciales, comerciales e industriales en Chile — con equipos Hikvision y Dahua respaldados por soporte técnico real.</p>
+        <div class="hero-actions reveal">
+          <a href="#contacto" class="btn btn-primary">
+            Solicitar cotización
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </a>
+          <a href="#categorias" class="btn btn-ghost">Ver catálogo</a>
+        </div>
+        <div class="hero-stats reveal">
+          <div class="stat"><b>Hikvision</b><span>Distribuidor autorizado</span></div>
+          <div class="stat"><b>Dahua</b><span>Distribuidor autorizado</span></div>
+          <div class="stat"><b>CCTV · Alarmas</b><span>Diseño de proyecto a medida</span></div>
+        </div>
       </div>
-      <div class="hero-stats reveal">
-        <div class="stat"><b>Hikvision</b><span>Distribuidor autorizado</span></div>
-        <div class="stat"><b>Dahua</b><span>Distribuidor autorizado</span></div>
-        <div class="stat"><b>CCTV · Alarmas</b><span>Diseño de proyecto a medida</span></div>
+      <div class="hero-photo reveal mt-14 lg:mt-0 relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10 aspect-[4/5] bg-gradient-to-br from-[#131619] to-[#0e1013] group">
+        <img
+          src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=900&auto=format&fit=crop"
+          onerror="this.style.display='none'"
+          alt="Centro de monitoreo de videovigilancia con pantallas en tiempo real"
+          loading="lazy"
+          class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent pointer-events-none"></div>
+        <div class="hero-photo-caption absolute bottom-6 left-6 right-6 pointer-events-none">
+          <span class="block text-[11px] uppercase tracking-[0.14em] text-white/70">Monitoreo 24/7</span>
+          <span class="block mt-1 text-sm font-medium text-white">Centro de control en tiempo real</span>
+        </div>
       </div>
     </div>
   </section>
@@ -357,29 +398,62 @@
         <p class="reveal">No vendemos cámaras sueltas: diseñamos el sistema completo, lo abastecemos con marcas certificadas y lo dejamos instalado y funcionando.</p>
       </div>
       <div class="services-grid">
-        <div class="service-card reveal">
-          <span class="num">01</span>
-          <div class="service-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        <div class="service-card reveal group">
+          <div class="w-full h-44 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=800&auto=format&fit=crop"
+              onerror="this.style.display='none'"
+              alt="Planificación técnica de un proyecto de videovigilancia en pantalla"
+              loading="lazy"
+              class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+            />
           </div>
-          <h3>Diseño de proyectos</h3>
-          <p>Levantamiento en terreno, planos de cobertura y dimensionamiento de almacenamiento antes de cotizar un solo equipo.</p>
+          <div class="service-card-body">
+            <span class="num">01</span>
+            <div class="service-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+            </div>
+            <h3>Diseño de proyectos</h3>
+            <p>Levantamiento en terreno, planos de cobertura y dimensionamiento de almacenamiento antes de cotizar un solo equipo.</p>
+          </div>
         </div>
-        <div class="service-card reveal">
-          <span class="num">02</span>
-          <div class="service-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8"/></svg>
+        <div class="service-card reveal group">
+          <div class="w-full h-44 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop"
+              onerror="this.style.display='none'"
+              alt="Racks de equipos de videovigilancia listos para despacho"
+              loading="lazy"
+              class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+            />
           </div>
-          <h3>Abastecimiento de equipos</h3>
-          <p>Cámaras, DVR/NVR, alarmas y racks Hikvision y Dahua, con disponibilidad real y respaldo de garantía.</p>
+          <div class="service-card-body">
+            <span class="num">02</span>
+            <div class="service-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8"/></svg>
+            </div>
+            <h3>Abastecimiento de equipos</h3>
+            <p>Cámaras, DVR/NVR, alarmas y racks Hikvision y Dahua, con disponibilidad real y respaldo de garantía.</p>
+          </div>
         </div>
-        <div class="service-card reveal">
-          <span class="num">03</span>
-          <div class="service-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
+        <div class="service-card reveal group">
+          <div class="w-full h-44 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop"
+              onerror="this.style.display='none'"
+              alt="Técnico realizando la instalación de un sistema de seguridad"
+              loading="lazy"
+              class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+            />
           </div>
-          <h3>Instalación profesional</h3>
-          <p>Técnicos propios, cableado prolijo y puesta en marcha con capacitación de uso incluida.</p>
+          <div class="service-card-body">
+            <span class="num">03</span>
+            <div class="service-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
+            </div>
+            <h3>Instalación profesional</h3>
+            <p>Técnicos propios, cableado prolijo y puesta en marcha con capacitación de uso incluida.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -394,12 +468,36 @@
     </div>
     <div class="cat-stage">
       <div class="cat-track" id="catTrack">
-        <div class="cat-card"><span class="idx">01</span><span class="tag">Videovigilancia</span><h3>Cámaras IP</h3><p>Resolución alta, visión nocturna y analítica de video para monitoreo remoto.</p></div>
-        <div class="cat-card"><span class="idx">02</span><span class="tag">Videovigilancia</span><h3>Cámaras análogas</h3><p>Hikvision y Dahua. Ideales para ampliar sistemas existentes a bajo costo.</p></div>
-        <div class="cat-card"><span class="idx">03</span><span class="tag">Kits</span><h3>Kit cámaras + disco duro</h3><p>Solución lista para instalar: cámaras, grabador y almacenamiento incluidos.</p></div>
-        <div class="cat-card"><span class="idx">04</span><span class="tag">Alarmas</span><h3>Kit alarmas comunitarias</h3><p>Pensado para condominios y juntas de vecinos: cobertura compartida y central de monitoreo.</p></div>
-        <div class="cat-card"><span class="idx">05</span><span class="tag">Infraestructura</span><h3>Racks y gabinetes</h3><p>Organización y protección física de grabadores, switches y patch panels.</p></div>
-        <div class="cat-card"><span class="idx">06</span><span class="tag">Soporte</span><h3>Utilidades CCTV</h3><p>Cables, fuentes, conectores y accesorios para dejar cada instalación bien terminada.</p></div>
+        <div class="cat-card group">
+          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=700&auto=format&fit=crop" onerror="this.style.display='none'" alt="Sensor y hardware de una cámara IP en detalle" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10 pointer-events-none"></div>
+          <span class="idx">01</span><span class="tag">Videovigilancia</span><h3>Cámaras IP</h3><p>Resolución alta, visión nocturna y analítica de video para monitoreo remoto.</p>
+        </div>
+        <div class="cat-card group">
+          <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=700&auto=format&fit=crop" onerror="this.style.display='none'" alt="Feed de video en una pantalla de monitoreo" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10 pointer-events-none"></div>
+          <span class="idx">02</span><span class="tag">Videovigilancia</span><h3>Cámaras análogas</h3><p>Hikvision y Dahua. Ideales para ampliar sistemas existentes a bajo costo.</p>
+        </div>
+        <div class="cat-card group">
+          <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=700&auto=format&fit=crop" onerror="this.style.display='none'" alt="Grabador y almacenamiento en rack de servidores" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10 pointer-events-none"></div>
+          <span class="idx">03</span><span class="tag">Kits</span><h3>Kit cámaras + disco duro</h3><p>Solución lista para instalar: cámaras, grabador y almacenamiento incluidos.</p>
+        </div>
+        <div class="cat-card group">
+          <img src="https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=700&auto=format&fit=crop" onerror="this.style.display='none'" alt="Control de alarma comunitaria desde una app móvil" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10 pointer-events-none"></div>
+          <span class="idx">04</span><span class="tag">Alarmas</span><h3>Kit alarmas comunitarias</h3><p>Pensado para condominios y juntas de vecinos: cobertura compartida y central de monitoreo.</p>
+        </div>
+        <div class="cat-card group">
+          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=700&auto=format&fit=crop" onerror="this.style.display='none'" alt="Infraestructura y gabinetes técnicos de un edificio moderno" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10 pointer-events-none"></div>
+          <span class="idx">05</span><span class="tag">Infraestructura</span><h3>Racks y gabinetes</h3><p>Organización y protección física de grabadores, switches y patch panels.</p>
+        </div>
+        <div class="cat-card group">
+          <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=700&auto=format&fit=crop" onerror="this.style.display='none'" alt="Accesorios y cableado técnico de un sistema CCTV" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10 pointer-events-none"></div>
+          <span class="idx">06</span><span class="tag">Soporte</span><h3>Utilidades CCTV</h3><p>Cables, fuentes, conectores y accesorios para dejar cada instalación bien terminada.</p>
+        </div>
       </div>
     </div>
   </section>
